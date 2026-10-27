@@ -65,18 +65,23 @@ const qs = document.getElementById("quizzes");
 document.getElementById("f").addEventListener("submit", async e => {
   e.preventDefault();
   const btn = document.getElementById("btn"), err = document.getElementById("err");
+  const $ = id => document.getElementById(id);
   const data = {
-    name: name.value.trim(), email: email.value.trim(), reason: reason.value.trim(),
+    name: $("name").value.trim(), email: $("email").value.trim(), reason: $("reason").value.trim(),
     quiz: document.querySelector("input[name=quiz]:checked").value
   };
-  btn.disabled = true; err.textContent = "";
+  btn.disabled = true; btn.textContent = "Submitting…"; err.textContent = "";
   try {
     if (!ENDPOINT) throw new Error("Registration endpoint not configured.");
     await fetch(ENDPOINT, { method: "POST", mode: "no-cors",
       headers: { "Content-Type": "text/plain" }, body: JSON.stringify(data) });
-    okQuiz.textContent = data.quiz; okEmail.textContent = data.email;
-    formCard.style.display = "none"; okCard.style.display = "block";
-  } catch (x) { err.textContent = x.message; btn.disabled = false; }
+    $("okQuiz").textContent = data.quiz; $("okEmail").textContent = data.email;
+    $("formCard").style.display = "none"; $("okCard").style.display = "block";
+    window.scrollTo(0, 0);
+  } catch (x) {
+    err.textContent = "Submission failed, please try again. (" + x.message + ")";
+    btn.disabled = false; btn.textContent = "Register for retake";
+  }
 });
 </script>
 </body>
