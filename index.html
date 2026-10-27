@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PM Quiz Retake</title>
+<style>
+:root{--bg:#f7f7f5;--card:#fff;--fg:#1d1d1f;--mut:#666;--acc:#0b5cad;--bd:#ddd}
+@media (prefers-color-scheme:dark){:root{--bg:#141414;--card:#1e1e1e;--fg:#eee;--mut:#aaa;--acc:#5aa2ff;--bd:#333}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif}
+main{max-width:560px;margin:40px auto;padding:0 16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:24px}
+h1{font-size:1.4rem;margin:0 0 4px}p.sub{color:var(--mut);margin:0 0 20px}
+label{display:block;font-weight:600;margin:16px 0 6px}
+.q{display:flex;flex-wrap:wrap;gap:8px}
+.q label{font-weight:400;margin:0;border:1px solid var(--bd);border-radius:8px;padding:8px 14px;cursor:pointer}
+.q input{margin-right:6px}
+input[type=email],input[type=text]{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--fg);font:inherit}
+button{margin-top:20px;width:100%;padding:12px;border:0;border-radius:8px;background:var(--acc);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+button:disabled{opacity:.6}
+.note{font-size:.9rem;color:var(--mut);margin-top:16px}
+.ok{display:none}.ok table{border-collapse:collapse;width:100%;margin-top:12px}
+.ok td{border:1px solid var(--bd);padding:8px}.ok td:first-child{font-weight:600;width:35%}
+.err{color:#c0392b;margin-top:10px}
+</style>
+</head>
+<body>
+<main>
+<div class="card" id="formCard">
+  <h1>Project Management — Quiz Retake</h1>
+  <p class="sub">BICS · For students who missed one of Quiz 4–8 with a valid reason. Retakes are an exception, granted once.</p>
+  <form id="f">
+    <label for="name">Full name</label>
+    <input type="text" id="name" required>
+    <label>Which quiz did you miss?</label>
+    <div class="q" id="quizzes"></div>
+    <label for="email">University email</label>
+    <input type="email" id="email" required placeholder="firstname.lastname@uni.lu">
+    <label for="reason">Reason (short)</label>
+    <input type="text" id="reason" required>
+    <button id="btn">Register for retake</button>
+    <div class="err" id="err"></div>
+  </form>
+  <p class="note">One retake opportunity only. Bring your student card.</p>
+</div>
+<div class="card ok" id="okCard">
+  <h1>You're registered ✔</h1>
+  <p class="sub">Please attend the retake session in person:</p>
+  <table>
+    <tr><td>Date</td><td>Friday, 04.12.2026</td></tr>
+    <tr><td>Time</td><td>15:45 – 18:15</td></tr>
+    <tr><td>Session</td><td>Lab 11</td></tr>
+    <tr><td>Room</td><td>MSA 3.350</td></tr>
+    <tr><td>Quiz</td><td id="okQuiz"></td></tr>
+  </table>
+  <p class="note">A confirmation has been recorded for <span id="okEmail"></span>. This is a one-time exception; further absences will not be accommodated.</p>
+</div>
+</main>
+<script>
+// Paste the Google Apps Script web app URL here (see apps-script/README.md)
+const ENDPOINT = "";
+const qs = document.getElementById("quizzes");
+[4,5,6,7,8].forEach(n => qs.insertAdjacentHTML("beforeend",
+  `<label><input type="radio" name="quiz" value="Quiz ${n}" required>Quiz ${n}</label>`));
+document.getElementById("f").addEventListener("submit", async e => {
+  e.preventDefault();
+  const btn = document.getElementById("btn"), err = document.getElementById("err");
+  const data = {
+    name: name.value.trim(), email: email.value.trim(), reason: reason.value.trim(),
+    quiz: document.querySelector("input[name=quiz]:checked").value
+  };
+  btn.disabled = true; err.textContent = "";
+  try {
+    if (!ENDPOINT) throw new Error("Registration endpoint not configured.");
+    await fetch(ENDPOINT, { method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "text/plain" }, body: JSON.stringify(data) });
+    okQuiz.textContent = data.quiz; okEmail.textContent = data.email;
+    formCard.style.display = "none"; okCard.style.display = "block";
+  } catch (x) { err.textContent = x.message; btn.disabled = false; }
+});
+</script>
+</body>
+</html>
