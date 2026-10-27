@@ -22,13 +22,14 @@ button:disabled{opacity:.6}
 .ok{display:none}.ok table{border-collapse:collapse;width:100%;margin-top:12px}
 .ok td{border:1px solid var(--bd);padding:8px}.ok td:first-child{font-weight:600;width:35%}
 .err{color:#c0392b;margin-top:10px}
+.chk{display:flex;gap:8px;align-items:flex-start;font-weight:400;font-size:.95rem}.chk input{margin-top:4px}
 </style>
 </head>
 <body>
 <main>
 <div class="card" id="formCard">
-  <h1>Project Management — Quiz Retake</h1>
-  <p class="sub">BICS · For students who missed one of Quiz 5–8 with a valid reason. Retakes are an exception, granted once.</p>
+  <h1>Project Management — Retake Request</h1>
+  <p class="sub">BICS · Request form for students who missed one of Quiz 5–8 for a serious, documented reason. Submitting a request does not guarantee approval.</p>
   <form id="f">
     <label for="name">Full name</label>
     <input type="text" id="name" required>
@@ -36,24 +37,18 @@ button:disabled{opacity:.6}
     <div class="q" id="quizzes"></div>
     <label for="email">University email</label>
     <input type="email" id="email" required placeholder="firstname.lastname@uni.lu">
-    <label for="reason">Reason (short)</label>
-    <input type="text" id="reason" required>
-    <button id="btn">Register for retake</button>
+    <label for="reason">Reason for absence</label>
+    <input type="text" id="reason" required placeholder="e.g. medical certificate, ADEM appointment">
+    <label class="chk"><input type="checkbox" id="proof" required> I can provide supporting documentation and will bring it, together with my student card, if my request is approved.</label>
+    <button id="btn">Submit request</button>
     <div class="err" id="err"></div>
   </form>
-  <p class="note">One retake opportunity only. Bring your student card.</p>
+  <p class="note">Each student may request a retake at most once. Requests without valid justification will be declined.</p>
 </div>
 <div class="card ok" id="okCard">
-  <h1>You're registered ✔</h1>
-  <p class="sub">Please attend the retake session in person:</p>
-  <table>
-    <tr><td>Date</td><td>Friday, 04.12.2026</td></tr>
-    <tr><td>Time</td><td>15:45 – 18:15</td></tr>
-    <tr><td>Session</td><td>Lab 11</td></tr>
-    <tr><td>Room</td><td>MSA 3.350</td></tr>
-    <tr><td>Quiz</td><td id="okQuiz"></td></tr>
-  </table>
-  <p class="note">A confirmation has been recorded for <span id="okEmail"></span>. This is a one-time exception; further absences will not be accommodated.</p>
+  <h1>Request received</h1>
+  <p class="sub">Your request for <b id="okQuiz"></b> has been submitted and is <b>pending review</b>.</p>
+  <p class="note">If your request is approved, you will receive an email at <span id="okEmail"></span> with the date, time and room of the make-up session. Please do not come to the session without an approval email.</p>
 </div>
 </main>
 <script>
@@ -80,7 +75,7 @@ document.getElementById("f").addEventListener("submit", async e => {
     window.scrollTo(0, 0);
   } catch (x) {
     err.textContent = "Submission failed, please try again. (" + x.message + ")";
-    btn.disabled = false; btn.textContent = "Register for retake";
+    btn.disabled = false; btn.textContent = "Submit request";
   }
 });
 </script>
