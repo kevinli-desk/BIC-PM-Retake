@@ -3,4 +3,4 @@
 2. Deploy → New deployment → Web app (Execute as: Me, Who has access: Anyone). Copy the URL.
 3. Paste the URL into `ENDPOINT` in `index.html`, commit, push.
 4. Enable GitHub Pages (Settings → Pages → main / root).
-Count per quiz in the Sheet: `=COUNTIF(D:D,"Quiz 4")` etc.
+Count per quiz in the Sheet: `=COUNTIF(D:D,"Quiz 5")` etc.

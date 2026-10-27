@@ -28,7 +28,7 @@ button:disabled{opacity:.6}
 <main>
 <div class="card" id="formCard">
   <h1>Project Management — Quiz Retake</h1>
-  <p class="sub">BICS · For students who missed one of Quiz 4–8 with a valid reason. Retakes are an exception, granted once.</p>
+  <p class="sub">BICS · For students who missed one of Quiz 5–8 with a valid reason. Retakes are an exception, granted once.</p>
   <form id="f">
     <label for="name">Full name</label>
     <input type="text" id="name" required>
@@ -60,7 +60,7 @@ button:disabled{opacity:.6}
 // Paste the Google Apps Script web app URL here (see apps-script/README.md)
 const ENDPOINT = "https://script.google.com/macros/s/AKfycbyWqk7-hCQ9FsQYk9jyqWJ5G_-HHR_rprBn_y01cJ3glXYLGTZeW5kZIiqrAioYkuH6/exec";
 const qs = document.getElementById("quizzes");
-[4,5,6,7,8].forEach(n => qs.insertAdjacentHTML("beforeend",
+[5,6,7,8].forEach(n => qs.insertAdjacentHTML("beforeend",
   `<label><input type="radio" name="quiz" value="Quiz ${n}" required>Quiz ${n}</label>`));
 document.getElementById("f").addEventListener("submit", async e => {
   e.preventDefault();
